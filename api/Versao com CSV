@@ -3,28 +3,22 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Rota para lidar com a solicitação de login
 @app.route('/login', methods=['POST'])
 def login():
-    # Obter dados do JSON enviado pela aplicação React
     dados = request.json
 
-    # Extrair nome de usuário e senha do JSON
     username = dados.get('username')
     password = dados.get('password')
 
-    # Verificar se o nome de usuário e a senha foram fornecidos
     if not username or not password:
         return jsonify({'mensagem': 'Nome de usuário e senha são obrigatórios'}), 400
 
-    # Verificar as credenciais no arquivo CSV
     with open('usuarios.csv', mode='r', newline='') as arquivo_csv:
         leitor_csv = csv.DictReader(arquivo_csv)
         for linha in leitor_csv:
             if linha['username'] == username and linha['password'] == password:
                 return jsonify({'mensagem': 'Login bem-sucedido', 'username': username, 'status': linha['status']}), 200
 
-    # Se as credenciais estiverem incorretas
     return jsonify({'mensagem': 'Credenciais inválidas'}), 401
 
 if __name__ == "__main__":
