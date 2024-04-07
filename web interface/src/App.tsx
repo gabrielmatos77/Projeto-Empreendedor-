@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 import { Login } from './components/login/login'
 import { SingIn } from './components/login/singIn'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const store = createStore({
   authName: '_auth',
@@ -12,21 +13,25 @@ const store = createStore({
   cookieSecure: window.location.protocol === 'https:',
 })
 
+const queryclient = new QueryClient()
+
 function App() {
 
   return (
     <AuthProvider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path={'/'} element={<></>} />
-          <Route path={'/login'} element={<Login />} />
-          <Route path={'/singIn'} element={<SingIn />} />
-          <Route element={<AuthOutlet fallbackPath='/login' />}>
-            <Route path='/main' element={<></>} />
-          </Route>
-        </Routes>
+      <QueryClientProvider client={queryclient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path={'/'} element={<></>} />
+            <Route path={'/login'} element={<Login />} />
+            <Route path={'/singIn'} element={<SingIn />} />
+            <Route element={<AuthOutlet fallbackPath='/login' />}>
+              <Route path='/main' element={<></>} />
+            </Route>
+          </Routes>
 
-      </BrowserRouter>
+        </BrowserRouter>
+      </QueryClientProvider>
     </AuthProvider>
   )
 }
