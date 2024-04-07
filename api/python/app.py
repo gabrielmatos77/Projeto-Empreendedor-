@@ -1,14 +1,17 @@
 import csv
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route('/login', methods=['POST'])
 def login():
     dados = request.json
     username = dados.get('username')
     password = dados.get('password')
-
+    response.headers.add('Access-Control-Allow-Origin', '*')
     if not username or not password:
         return jsonify({'mensagem': 'Nome de usuário e senha são obrigatórios'}), 400
 
@@ -19,6 +22,7 @@ def login():
                 return jsonify({'mensagem': 'Login bem-sucedido', 'username': username, 'status': linha['status']}), 200
 
     return jsonify({'mensagem': 'Credenciais inválidas'}), 401
+
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -41,6 +45,7 @@ def register():
         escritor_csv.writerow([username, password, status])
 
     return jsonify({'mensagem': 'Usuário cadastrado com sucesso'}), 201
+
 
 if __name__ == "__main__":
     app.run(port=5000)
