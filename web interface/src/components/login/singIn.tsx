@@ -8,7 +8,8 @@ export function SingIn() {
   const { mutate } =
     useMutation({
       mutationFn: (e: { user: string, pass: string }) => register(e.user, e.pass),
-      onSuccess: () => {
+      onSuccess: (e) => {
+        alert(e.data.mensagem)
         navi('/login')
       }
 

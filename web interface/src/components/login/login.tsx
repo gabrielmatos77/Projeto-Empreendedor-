@@ -10,6 +10,7 @@ export function Login() {
     useMutation({
       mutationFn: (e: { user: string, pass: string }) => login(e.user, e.pass),
       onSuccess: (e) => {
+        alert(e.data.mensagem)
         e.data.user && singIn({
           auth: {
             token: "",
