@@ -11,7 +11,6 @@ def login():
     dados = request.json
     username = dados.get('username')
     password = dados.get('password')
-    response.headers.add('Access-Control-Allow-Origin', '*')
     if not username or not password:
         return jsonify({'mensagem': 'Nome de usuário e senha são obrigatórios'}), 400
 
