@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../api/login";
 import { FormEvent } from "react";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
+import './css/login.css'
 
 export function Login() {
   const singIn = useSignIn()
+  const navi = useNavigate()
   const { mutate, status } =
     useMutation({
       mutationFn: (e: { user: string, pass: string }) => login(e.user, e.pass),
@@ -23,11 +25,26 @@ export function Login() {
   const submitHandle = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dt = new FormData(e.currentTarget as HTMLFormElement)
+    if (singIn({
+      auth: {
+        token: 'ey....mA',
+        type: 'Bearer'
+      },
+      userState: {
+        name: 'React User',
+        uid: 123456
+      }
+    })) {
+
+      navi('/main')
+    }
+
+
     mutate({ user: dt.get('user') as string || "", pass: dt.get('pass') as string || "" })
   }
   return status === 'pending' ? null : <div className="w-full h-screen bg-neutral-600 text-white flex justify-center items-center">
     <form onSubmit={submitHandle}
-      className="flex flex-col gap-4 rounded-lg border p-4 bg-neutral-500 justify-center items-center">
+      className="customborder flex flex-col gap-4  border p-4  justify-center items-center">
       <div className="rounded-full bg-teal-400 w-40 h-40 flex justify-center items-center">Logo</div>
       <label htmlFor="">Email</label>
       <input name="user" className="bg-transparent border rounded-md" type="text" />

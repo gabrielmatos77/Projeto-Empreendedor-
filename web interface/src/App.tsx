@@ -5,6 +5,7 @@ import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 import { Login } from './components/login/login'
 import { SingIn } from './components/login/singIn'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Main } from './components/main/main'
 
 const store = createStore({
   authName: '_auth',
@@ -22,11 +23,11 @@ function App() {
       <QueryClientProvider client={queryclient}>
         <BrowserRouter>
           <Routes>
-            <Route path={'/'} element={<></>} />
+            <Route path='/main/*' element={<Main />} />
             <Route path={'/login'} element={<Login />} />
             <Route path={'/singIn'} element={<SingIn />} />
             <Route element={<AuthOutlet fallbackPath='/login' />}>
-              <Route path='/main' element={<></>} />
+              <Route path='/' element={<Main />} />
             </Route>
           </Routes>
 
