@@ -1,6 +1,11 @@
-import axios from "axios";
+import { pocketBaseClient } from "../util/pocketbase";
 
 export async function login(user: string, pass: string) {
-  return await axios.post('http://localhost:5000/login'
-    , { username: user, password: pass })
+
+
+  return await pocketBaseClient.collection('users').authWithPassword(
+    user,
+    pass,
+  );
+
 }

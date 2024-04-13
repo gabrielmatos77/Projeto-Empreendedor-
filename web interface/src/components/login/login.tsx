@@ -12,34 +12,23 @@ export function Login() {
     useMutation({
       mutationFn: (e: { user: string, pass: string }) => login(e.user, e.pass),
       onSuccess: (e) => {
-        alert(e.data.mensagem)
-        e.data.user && singIn({
+        singIn({
           auth: {
-            token: "",
+            token: e.token,
+            type: 'Bearer'
           },
-          userState: {}
+          userState: {
+            name: e.record.collectionName
+          }
         })
+
+        navi('/main')
       }
 
     });
   const submitHandle = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dt = new FormData(e.currentTarget as HTMLFormElement)
-    if (singIn({
-      auth: {
-        token: 'ey....mA',
-        type: 'Bearer'
-      },
-      userState: {
-        name: 'React User',
-        uid: 123456
-      }
-    })) {
-
-      navi('/main')
-    }
-
-
     mutate({ user: dt.get('user') as string || "", pass: dt.get('pass') as string || "" })
   }
   return status === 'pending' ? null : <div className="w-full h-screen bg-neutral-600 text-white flex justify-center items-center">

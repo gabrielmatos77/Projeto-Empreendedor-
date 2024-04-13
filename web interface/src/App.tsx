@@ -7,6 +7,7 @@ import { SingIn } from './components/login/singIn'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Main } from './components/main/main'
 
+
 const store = createStore({
   authName: '_auth',
   authType: 'cookie',
@@ -15,6 +16,7 @@ const store = createStore({
 })
 
 const queryclient = new QueryClient()
+
 
 function App() {
 
