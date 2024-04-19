@@ -23,7 +23,7 @@ impl Machine {
 
     async fn change(mut self) -> Self {
         let rng: f64 = rand::thread_rng().gen();
-        let changestate = rng > 0.99;
+        let changestate = rng > 0.9;
         match (self.working, changestate) {
             (true, true) => {
                 self = self.stop_machine().await;
@@ -49,7 +49,7 @@ impl Machine {
         data.insert("fim", nowdate);
         data.insert("qtd_prod", thisqtd);
         let client = reqwest::Client::new();
-        let resp = client
+        let _ = client
             .patch(format!(
                 "http://4.228.217.142:8090/api/collections/registro_producao/records/{}",
                 self.exec_id
@@ -58,12 +58,49 @@ impl Machine {
             .send()
             .await;
 
+        let mut data = HashMap::new();
+        data.insert("maquina", &self.name);
+        let choices = vec![
+            "ausencia_operador".to_string(),
+            "falta_de_peca".to_string(),
+            "regulagem_maquina".to_string(),
+            "setup".to_string(),
+            "abastecer_maquina".to_string(),
+            "manutencao_preventiva".to_string(),
+            "manutencao_corretiva".to_string(),
+        ];
+        let rng: usize = rand::thread_rng().gen_range(0..6);
+        data.insert("tipo_par", &choices[rng]);
+        let record = client
+            .post("http://4.228.217.142:8090/api/collections/parada_maquina/records")
+            .json(&data)
+            .send()
+            .await
+            .expect("err")
+            .json::<ResponseStartStopMachine>()
+            .await
+            .expect("s");
+        self.exec_id = record.id;
         self.working = false;
         self.qtd = 0.0;
         return self;
     }
     async fn start_machine(mut self) -> Self {
         //req to start
+        let nowdate = &chrono::Local::now().to_string();
+        let thisqtd = &self.qtd.to_string();
+        let mut data = HashMap::new();
+        data.insert("maquina", &self.name);
+        data.insert("fim", nowdate);
+        let client = reqwest::Client::new();
+        let _ = client
+            .patch(format!(
+                "http://4.228.217.142:8090/api/collections/parada_maquina/records/{}",
+                self.exec_id
+            ))
+            .json(&data)
+            .send()
+            .await;
         let mut data = HashMap::new();
         data.insert("maquina", &self.name);
         let client = reqwest::Client::new();
@@ -129,6 +166,18 @@ struct NowMachineState {
     qtd_prod: u32,
     updated: String,
 }
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize, Debug)]
+struct NowMachineStateStop {
+    collectionId: String,
+    collectionName: String,
+    created: String,
+    fim: String,
+    id: String,
+    maquina: String,
+    tipo_par: String,
+    updated: String,
+}
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
@@ -143,6 +192,18 @@ struct ResponseStartMachine {
     qtd_prod: u32,
 }
 
+#[allow(non_snake_case)]
+#[derive(Serialize, Deserialize, Debug)]
+struct ResponseStartStopMachine {
+    id: String,
+    collectionId: String,
+    collectionName: String,
+    created: String,
+    updated: String,
+    maquina: String,
+    fim: String,
+    tipo_par: String,
+}
 #[tokio::main]
 async fn main() {
     let dt = reqwest::get("http://4.228.217.142:8090/api/collections/maquinas/records")
@@ -160,7 +221,7 @@ async fn main() {
             .json::<PocketbaseRequest<NowMachineState>>()
             .await;
 
-        let (id_exec, tot_itens) = match this_exec {
+        let (mut id_exec, mut tot_itens) = match this_exec {
             Ok(e) => {
                 if e.totalItems > 0 {
                     (e.items.first().unwrap().id.to_string(), true)
@@ -170,6 +231,25 @@ async fn main() {
             }
             Err(_) => ("".to_string(), false),
         };
+        if id_exec == "" {
+            let this_stop = reqwest::get(format!(
+                "http://4.228.217.142:8090/api/collections/parada_maquina/records?filter=(fim=''%26%26maquina.id=\"{}\")",
+                maq.id
+            ))
+            .await
+            .expect("errstop")
+            .json::<PocketbaseRequest<NowMachineStateStop>>()
+            .await;
+            println!("{this_stop:#?}");
+            id_exec = this_stop
+                .expect("err")
+                .items
+                .first()
+                .unwrap()
+                .id
+                .to_string();
+            tot_itens = false
+        }
 
         maqs.push(Machine::new(maq.id, tot_itens, id_exec));
     }
