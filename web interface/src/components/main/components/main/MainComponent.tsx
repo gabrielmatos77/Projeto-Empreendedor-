@@ -17,7 +17,7 @@ export function Mainconponent() {
       .collection('registro_producao').subscribe('*', function(e) {
         if (e.action === 'create') {
           query.setQueryData(['registred_Machines'], (oldData: { maquina: string }[]) => {
-            return oldData ? [...oldData].map((x: { maquina: string }) => x.maquina === e.record.maquina ? e.record : x) : oldData
+            return oldData ? [...oldData].map((x: { maquina: string }) => x.maquina === e.record.maquina ? { ...x, ...e.record } : x) : oldData
           })
         }
       }, {});
@@ -25,7 +25,7 @@ export function Mainconponent() {
       .collection('parada_maquina').subscribe('*', function(e) {
         if (e.action === 'create') {
           query.setQueryData(['registred_Machines'], (oldData: { maquina: string }[]) => {
-            return oldData ? oldData.map((x: { maquina: string }) => x.maquina === e.record.maquina ? e.record : x) : oldData
+            return oldData ? oldData.map((x: { maquina: string }) => x.maquina === e.record.maquina ? { ...x, ...e.record } : x) : oldData
           })
         }
       }, {});
@@ -33,7 +33,7 @@ export function Mainconponent() {
   console.log(data)
   return status === 'success' && <div className="flex flex-wrap p-6 gap-8 flex-row">
     {data.map((e) =>
-      <div className="border-4 customborder text-white p-4 w-80 h-80 ">
+      <div className="border-4 customborder transition-all duration-150 text-white p-4 w-80 h-80 ">
         <div className={`${e.collectionName === 'parada_maquina' ?
           "parada" : "executando"} flex flex-col justify-around `}>
           <div className="">Nome: {e.expand?.maquina.maquina}</div>
