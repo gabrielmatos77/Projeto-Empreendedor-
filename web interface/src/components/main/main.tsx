@@ -4,9 +4,9 @@ import { RegisterMachine } from "./components/registerMachine/registerMachine";
 import { Mainconponent } from "./components/main/MainComponent";
 
 export function Main() {
-  return <div className="bg-neutral-600 h-screen w-full flex">
+  return <div className="bg-neutral-600 h-screen w-full flex overflow-hidden">
     <Aside />
-    <div className="w-full">
+    <div className="w-full h-full overflow-auto">
       <Routes>
         <Route path='/' element={<Mainconponent />} />
         <Route path='/register_machine' element={<RegisterMachine />} />

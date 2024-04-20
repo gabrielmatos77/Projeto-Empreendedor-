@@ -162,7 +162,7 @@ struct NowMachineState {
     created: String,
     fim: String,
     id: String,
-    maquina: Vec<String>,
+    maquina: String,
     qtd_prod: u32,
     updated: String,
 }
@@ -187,7 +187,7 @@ struct ResponseStartMachine {
     collectionName: String,
     created: String,
     updated: String,
-    maquina: Vec<String>,
+    maquina: String,
     fim: String,
     qtd_prod: u32,
 }
