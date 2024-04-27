@@ -25,11 +25,12 @@ function App() {
       <QueryClientProvider client={queryclient}>
         <BrowserRouter>
           <Routes>
-            <Route path='/main/*' element={<Main />} />
+            {/* <Route path='/main/*' element={<Main />} /> */}
             <Route path={'/login'} element={<Login />} />
             <Route path={'/singIn'} element={<SingIn />} />
             <Route element={<AuthOutlet fallbackPath='/login' />}>
               <Route path='/' element={<Main />} />
+              <Route path='/main/*' element={<Main />} />
             </Route>
           </Routes>
 

@@ -29,9 +29,8 @@ export function Mainconponent() {
           })
         }
       }, {});
-  }, [])
-  console.log(data)
-  return status === 'success' && <div className="flex flex-wrap p-6 gap-8 flex-row">
+  }, [query])
+  return status === 'success' && <div className="flex flex-wrap justify-center p-6 gap-8 flex-row">
     {data.map((e) =>
       <div key={e.id} className="border-4 customborder transition-all duration-150 text-white p-4 w-80 h-80 ">
         <div key={e.id} className={`${e.collectionName === 'parada_maquina' ?

@@ -21,7 +21,6 @@ export function Login() {
             name: e.record.collectionName
           }
         })
-
         navi('/main')
       }
 
@@ -42,9 +41,9 @@ export function Login() {
       <button
         type="submit"
         className="bg-teal-400 rounded-md p-2 text-center w-full hover:shadow-md hover:shadow-teal-500 
-        active:scale-105 duration-150 ease-linear ">Logar</button>
+        active:scale-105 duration-150 ease-linear">Logar</button>
       <Link to="/singIn" className="bg-orange-400 rounded-md p-2 text-center w-full hover:shadow-md hover:shadow-orange-500 
-        active:scale-105 duration-150 ease-linear ">Cadastrar</Link>
+        active:scale-105 duration-150 ease-linear">Cadastrar</Link>
     </form>
   </div>
 }

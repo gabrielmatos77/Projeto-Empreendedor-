@@ -1,0 +1,57 @@
+.asidewrap {
+  position: fixed;
+  z-index: 10;
+  left: -100%;
+  gap: .5rem;
+  background: black;
+  transition: all .4s cubic-bezier(1, 0, 0, 1);
+}
+
+.asidewrap:has(#inputhidden:checked) {
+  left: 0;
+}
+
+.asidewrap label {
+  position: fixed;
+  left: 2px;
+  top: 50%;
+  background: #232323;
+  padding: .4rem;
+  padding-bottom: .8rem;
+  border-radius: .4rem;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(0deg);
+  transition: all .4s cubic-bezier(1, 0, 0, 1);
+}
+
+.asidewrap label:has(#inputhidden:checked) {
+  transform: rotate(180deg);
+  background: #fff;
+  color: black;
+  left: 10rem;
+  top: 50%;
+}
+
+#inputhidden {
+  display: none;
+}
+
+.navbutton {
+  padding: .4rem;
+  border: 2px solid #cdcdcd;
+  border-radius: .4rem;
+  box-shadow: inset 0rem 0px .8rem 0px #23232389,
+    inset 0px .0rem .8rem .5rem #12121298;
+  transition: all .4s linear;
+}
+
+.navbutton:hover {
+  background: #747474;
+}
+
+.logoutbutton:hover {
+  background: red;
+}
