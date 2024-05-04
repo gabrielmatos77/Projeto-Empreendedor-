@@ -10,6 +10,7 @@ export async function getMachines() {
   let maqs = await pocketBaseClient.collection('maquinas').getFullList({
     sort: '-created',
   });
+
   running.forEach((e) => {
     maqs = maqs.map((x) => x.id === e.maquina ? e : x)
   })

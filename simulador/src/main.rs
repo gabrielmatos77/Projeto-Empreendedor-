@@ -1,7 +1,11 @@
 use core::f64;
 use rand::prelude::*;
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, thread::sleep, time::Duration};
+use std::{
+    collections::HashMap,
+    thread::{self, sleep, spawn},
+    time::Duration,
+};
 
 #[derive(Clone)]
 struct Machine {
@@ -23,7 +27,7 @@ impl Machine {
 
     async fn change(mut self) -> Self {
         let rng: f64 = rand::thread_rng().gen();
-        let changestate = rng > 0.9;
+        let changestate = rng > 0.99;
         match (self.working, changestate) {
             (true, true) => {
                 self = self.stop_machine().await;
@@ -34,7 +38,7 @@ impl Machine {
                 self
             }
             (true, false) => {
-                self = self.incremet_qtd();
+                self = self.incremet_qtd().await;
                 self
             }
             _ => self,
@@ -57,7 +61,6 @@ impl Machine {
             .json(&data)
             .send()
             .await;
-
         let mut data = HashMap::new();
         data.insert("maquina", &self.name);
         let choices = vec![
@@ -118,8 +121,20 @@ impl Machine {
         self.working = true;
         self
     }
-    fn incremet_qtd(mut self) -> Self {
+    async fn incremet_qtd(mut self) -> Self {
         self.qtd = self.qtd + 1.0;
+        let thisqtd = &self.qtd.to_string();
+        let mut data = HashMap::new();
+        data.insert("qtd_prod", thisqtd);
+        let client = reqwest::Client::new();
+        let _ = client
+            .patch(format!(
+                "http://4.228.217.142:8090/api/collections/registro_producao/records/{}",
+                self.exec_id
+            ))
+            .json(&data)
+            .send()
+            .await;
         return self;
     }
     fn plot(self) -> Self {
@@ -260,6 +275,6 @@ async fn main() {
             intmaqs.push(maq.change().await.plot())
         }
         maqs = intmaqs;
-        sleep(Duration::new(10, 0))
+        sleep(Duration::new(rand::thread_rng().gen_range(1..10), 0))
     }
 }
