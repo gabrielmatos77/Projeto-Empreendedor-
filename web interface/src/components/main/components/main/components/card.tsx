@@ -27,7 +27,9 @@ export function CardInfo({ data }: { data: RecordModel }) {
         <div className="">{e.collectionName === 'parada_maquina' ?
           '' : 'Produzido Desde Ultima Parada: ' + e.qtd_prod}</div>
         <div className="">{e.collectionName === 'parada_maquina' ?
-          totalProd?.total_day_prod : 'Produzido Hoje: ' + (totalProd?.total_day_prod + e.qtd_prod)}</div>
+          'Produzido Hoje: ' + totalProd?.total_day_prod + '/' +
+          e.expand?.maquina.meta_diaria : 'Produzido Hoje: ' + (totalProd?.total_day_prod + e.qtd_prod) + '/' +
+          e.expand?.maquina.meta_diaria}</div>
         <div className="">Status: {
           e.collectionName === 'parada_maquina' ?
             e.tipo_par.replace("_", ' ') : "executando"}</div>

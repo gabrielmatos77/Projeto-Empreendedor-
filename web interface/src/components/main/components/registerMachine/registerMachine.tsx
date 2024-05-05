@@ -8,7 +8,7 @@ export function RegisterMachine() {
   const navi = useNavigate()
   const { mutate } =
     useMutation({
-      mutationFn: (e: { name: string, ip: string }) => registerMachine(e.name, e.ip),
+      mutationFn: (e: { name: string, ip: string, meta: string, perid: string }) => registerMachine(e.name, e.ip, e.perid, e.meta),
       onSuccess: () => {
         navi('/main/')
       }
@@ -17,7 +17,7 @@ export function RegisterMachine() {
   const submitHandle = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dt = new FormData(e.currentTarget as HTMLFormElement)
-    mutate({ name: dt.get('name') as string || "", ip: dt.get('ip') as string || "" })
+    mutate({ name: dt.get('name') as string || "", ip: dt.get('ip') as string || "", perid: dt.get('perid') as string || "", meta: dt.get('meta') as string || "0" })
   }
   return <div className="w-full h-full flex justify-center items-center formanimated">
     <form
@@ -36,6 +36,18 @@ export function RegisterMachine() {
           Agora Digite O Endereço Ip Da Maquina:
         </label>
         <input id="secondfield" name="ip" required type="text" className="border w-full bg-transparent p-2 rounded-md focus:outline-none" />
+      </div>
+      <div className="thirddiv flex flex-col w-full">
+        <label>
+          Agora Digite a Meta De Produção Diara:
+        </label>
+        <input id="thirdfield" name="meta" required type="number" className="border w-full bg-transparent p-2 rounded-md focus:outline-none" />
+      </div>
+      <div className="forthdiv flex flex-col w-full">
+        <label>
+          Agora Digite a Peridiocidade De Manutençoes:
+        </label>
+        <input id="forthfield" name="perid" required type="number" className="border w-full bg-transparent p-2 rounded-md focus:outline-none" />
       </div>
 
       <button type="submit" className="bg-orange-400 rounded-md p-2 text-center w-full hover:shadow-md hover:shadow-orange-500 
