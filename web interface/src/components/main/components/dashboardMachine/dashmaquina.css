@@ -1,0 +1,61 @@
+.maindashcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.bodycontentdash {
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 80%;
+}
+
+.maqname {
+  font-size: 2rem;
+  width: 100%;
+  padding: 1.4rem;
+  text-align: center;
+  background: #444;
+}
+
+.dashboardinfos {
+  font-size: 1.4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.buttonsdash {
+  width: 100%;
+  padding: 2rem;
+  background: #222;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.Parada {
+  background: red;
+}
+
+.Produzindo {
+  background: lime;
+}
+
+.selectdash {
+  background: transparent;
+  colOR: white;
+  border: 2px solid whitesmoke;
+  border-radius: .4rem;
+  padding: .6rem;
+  margin: .5rem;
+}
+
+.selectdash option {
+  background: #333;
+  color: white;
+}

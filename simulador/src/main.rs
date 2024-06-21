@@ -27,7 +27,7 @@ impl Machine {
 
     async fn change(mut self) -> Self {
         let rng: f64 = rand::thread_rng().gen();
-        let changestate = rng > 0.99;
+        let changestate = rng > 0.98;
         match (self.working, changestate) {
             (true, true) => {
                 self = self.stop_machine().await;
@@ -275,6 +275,6 @@ async fn main() {
             intmaqs.push(maq.change().await.plot())
         }
         maqs = intmaqs;
-        sleep(Duration::new(rand::thread_rng().gen_range(1..10), 0))
+        sleep(Duration::new(rand::thread_rng().gen_range(15..30), 0))
     }
 }
