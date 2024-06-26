@@ -10,5 +10,11 @@ export async function registerMachine(name: string, ip: string, perid: string, m
     "peridiocidade": perid
   };
 
-  return await pocketBaseClient.collection('maquinas').create(data);
+  const maq = await pocketBaseClient.collection('maquinas').create(data);
+  const dataparada = {
+    "tipo_par": "ausencia_operador",
+    "maquina": maq.id
+  };
+  const record = await pocketBaseClient.collection('parada_maquina').create(dataparada);
+  return record
 }

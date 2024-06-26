@@ -26,6 +26,8 @@ export function CardInfo({ data }: { data: RecordModel }) {
   const pastPorcentageOfToday = (dtinseconds / DAYINSECONDS)
   const optimalQtd = ~~(e.expand?.maquina.meta_diaria * pastPorcentageOfToday)
   const efic = ((totalProd?.total_day_prod / optimalQtd) * 100).toFixed(2)
+  const quali = totalProd?.total_day_prod === 0 ? 100 :
+    ((totalProd?.total_day_prod - totalProd?.total_rej_day) / (totalProd?.total_day_prod)) * 100
   return status === 'success'
     && <div key={e.id} className="border-4 customborder transition-all duration-150 text-white p-4 w-80 h-80 ">
       <div key={e.id} className={`${e.collectionName === 'parada_maquina' ?
@@ -51,7 +53,7 @@ export function CardInfo({ data }: { data: RecordModel }) {
                 e.tipo_par.replace("_", ' ') : "executando"}</div>
             <div className="">status iniciado em: {e.created}</div>
           </>
-          : <MaqDetail maq={e.expand?.maquina.id} efic={efic} />}
+          : <MaqDetail maq={e.expand?.maquina.id} efic={efic} quali={quali.toFixed(2)} />}
       </div>
     </div>
 }

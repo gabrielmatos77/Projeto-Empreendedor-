@@ -4,9 +4,10 @@ import { getDisp } from "../../../../../api/get_disp"
 interface maqdetail {
   maq: string,
   efic: string,
+  quali: string,
 }
 
-export function MaqDetail({ maq, efic }: maqdetail) {
+export function MaqDetail({ maq, efic, quali }: maqdetail) {
   const { data: disp, status } =
     useQuery(
       {
@@ -19,6 +20,7 @@ export function MaqDetail({ maq, efic }: maqdetail) {
   }} className="w-full h-full">
     <div>Eficiencia: {efic}%</div>
     <div>Disponibilidade: {disp.toFixed(2)}%</div>
-    <div>Oee: {((disp * Number(efic) * 100) / 10000).toFixed(2)}%</div>
+    <div>Qualidade: {quali}%</div>
+    <div>Oee: {((disp * Number(efic) * Number(quali)) / 10000).toFixed(2)}%</div>
   </div>
 }
